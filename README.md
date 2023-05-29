@@ -65,4 +65,38 @@ The expected output should look like this.
           } 
     }
 ```
-For more information on Unix timestamps, read [here](https://unixtimestamp.com).
+
+If there are multiple POST requests called beforehand, and the limit of your PULL request is below that value, the expected output should look like this, when we call the following request:
+```json
+    {
+        "chat" : "party1:party2",
+        "cursor" : 0,
+        "limit" : 2,
+        "reverse" : true
+      }
+
+```
+
+We should expect an output like this:
+```json
+    {
+    "messages": [
+        {
+            "chat": "party1:party2",
+            "text": "hi",
+            "sender": "party1",
+            "send_time": 1685333688
+        },
+        {
+            "chat": "party2:party1",
+            "text": "hi",
+            "sender": "party2",
+            "send_time": 1685333686
+        }
+    ],
+    "has_more": true,
+    "next_cursor": 2
+}
+```
+
+*For more information on Unix timestamps, read [here](https://unixtimestamp.com).*
