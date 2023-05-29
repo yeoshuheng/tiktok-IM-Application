@@ -40,9 +40,10 @@ The program consists of a HTTP Server that takes in HTTP requests, which are the
 
 #### SEND
 This uses endpoint `api/send`, the following is an example body for the POST request:
+Note that both parties within the chat are kept seperated with a ":".
 ```json
     {
-      "chat" : "party1:party2", // Note that both parties are kept seperated with ':'.
+      "chat" : "party1:party2",
       "text" : "hi",
       "sender" : "party1"
       }
@@ -59,7 +60,7 @@ This uses endpoint `api/pull`, the following is an example body for the GET requ
       }
 ```
 
-The expected output should look like this.
+The expected output should look like this. Note that time is kept in Unix timestamp format.
 ```json
     {
         "messages" : {
@@ -67,7 +68,7 @@ The expected output should look like this.
             "chat" : "party1:party2",
             "text" : "hi",
             "sender" : "party1",
-            "time" : 1685209278  // Returns in Unix timestamp.
+            "time" : 1685209278
 
           } 
     }
