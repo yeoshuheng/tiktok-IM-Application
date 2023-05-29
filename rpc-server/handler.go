@@ -11,6 +11,10 @@ import (
 type IMServiceImpl struct{}
 
 func (s *IMServiceImpl) Send(ctx context.Context, req *rpc.SendRequest) (*rpc.SendResponse, error) {
+	err := validateRequest(req)
+	if err != nil {
+		return nil, err
+	}
 
 	id := getID(req.Message.GetChat())
 
@@ -20,7 +24,7 @@ func (s *IMServiceImpl) Send(ctx context.Context, req *rpc.SendRequest) (*rpc.Se
 		Timestamp: time.Now().Unix(),
 	}
 
-	err := db.WriteToDatabase(ctx, id, toSend)
+	err = db.WriteToDatabase(ctx, id, toSend)
 	if err != nil {
 		return nil, err
 	}

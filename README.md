@@ -7,7 +7,7 @@ This is a working backend developed as part of TikTok Tech Immersion 2023.
 ### Objectives
 My objective for this program was to learn as much as possible. 
 Hence, this application has been implemented for both MySQL and Redis.
-Which database to be used can be configured within rpc-server/main.go, rpc-server/handlers.go and ./docker-compose.yml.
+Which database to be used can be configured within *./rpc-server/main.go*, *./rpc-server/handlers.go* and *./docker-compose.yml*.
 
 ### Running the program.
 The program can be set up by first running the following command on terminal within the project's main directory.
@@ -21,12 +21,18 @@ Subsequently, the program can be ran with just this:
     docker-compose up
 ```
 
+A common issue I faced when setting this program up on MacOS was a permission error in the *.buildx* file.
+This was resolved by running the following command which updates *./docker* permission settings from the terminal.
+```shell
+    sudo chown -R [user] ~./docker
+```
+
 ### Structure
 The program consists of a HTTP Server that takes in HTTP requests, which are then passed onto our RPC Server, which will run the necessary logic to read / write to the database.
 The program supports only POST and GET requests.
 
 #### SEND
-This uses endpoint *api/send*, the following is an example body for the POST request:
+This uses endpoint `api/send`, the following is an example body for the POST request:
 ```json
     {
       "chat" : "party1:party2", // Note that both parties are kept seperated with ':'.
@@ -36,7 +42,7 @@ This uses endpoint *api/send*, the following is an example body for the POST req
 ```
 
 #### PULL
-This uses endpoint *api/pull*, the following is an example body for the GET request:
+This uses endpoint `api/pull`, the following is an example body for the GET request:
 ```json
     {
         "chat" : "party1:party2",
@@ -59,4 +65,4 @@ The expected output should look like this.
           } 
     }
 ```
-For more information on Unix timestamps, read [here](https://unixtimestamp.com)
+For more information on Unix timestamps, read [here](https://unixtimestamp.com).
