@@ -24,10 +24,17 @@ func (s *IMServiceImpl) Send(ctx context.Context, req *rpc.SendRequest) (*rpc.Se
 		Timestamp: time.Now().Unix(),
 	}
 
+	// Writing to Redis Database.
 	err = db.WriteToDatabase(ctx, id, toSend)
 	if err != nil {
 		return nil, err
 	}
+
+	// Writing to SQL DB.
+	//err = db.WriteToSQLDB(ctx, id, toSend)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	resp := rpc.NewSendResponse()
 	resp.Code, resp.Msg = 0, "success"
@@ -41,10 +48,17 @@ func (s *IMServiceImpl) Pull(ctx context.Context, req *rpc.PullRequest) (*rpc.Pu
 	limit := req.GetLimit()
 	end := strt + int64(limit)
 
+	// Reading from Redis DB.
 	rawMsg, err := db.ReadFromDatabase(ctx, id, strt, end, req.GetReverse())
 	if err != nil {
 		return nil, err
 	}
+
+	// Reading from SQL DB.
+	//rawMsg, err := db.ReadFromSQLDB(ctx, id, strt, end, req.GetReverse())
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	ret := make([]*rpc.Message, 0)
 	var c int32 = 0

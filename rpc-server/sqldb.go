@@ -4,25 +4,46 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type sqlDB struct {
 	cli *sql.DB
 }
 
-func (s *sqlDB) initSQLDB() error {
-	db, err := sql.Open("mysql", "username:password@tcp(8080:8080)/messageDB")
+func (s *sqlDB) initSQLDB(ctx context.Context) error {
+	db, err := sql.Open("mysql", "root:password@tcp(sql:3306)/")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS messageDB")
+	if err != nil {
+		return err
+	}
+	_, err = db.Exec("USE messageDB")
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS messages (id VARCHAR(255), timestamp BIGINT, sender VARCHAR(255), message VARCHAR(255))")
+	if err != nil {
+		return err
+	}
+
+	err = db.PingContext(ctx)
 	if err != nil {
 		return err
 	}
 	s.cli = db
-	defer db.Close()
 	return nil
 }
 
 func (s *sqlDB) WriteToSQLDB(ctx context.Context, id string, input *Input) error {
 	sender, time, msg := input.Sender, input.Timestamp, input.Message
-	cmd := fmt.Sprintf("INSERT INTO messageDB VALUES(%s, %d, %s, %s)", id, time, sender, msg)
+	cmd := fmt.Sprintf("INSERT INTO messages VALUES(%s, %d, %s, %s)", id, time, sender, msg)
 	_, err := s.cli.Query(cmd)
 	if err != nil {
 		return err
@@ -38,7 +59,7 @@ func (s *sqlDB) ReadFromSQLDB(ctx context.Context, id string, start int64, end i
 	} else {
 		direction = "DESC"
 	}
-	cmd := fmt.Sprintf("SELECT * FROM messageDB WHERE id == %s ORDER BY timestamp %s", id, direction)
+	cmd := fmt.Sprintf("SELECT timestamp, sender, message FROM messages WHERE id == %s ORDER BY timestamp %s", id, direction)
 	results, err := s.cli.Query(cmd)
 	if err != nil {
 		return nil, err

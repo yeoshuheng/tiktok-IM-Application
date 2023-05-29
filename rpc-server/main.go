@@ -10,16 +10,26 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
+// Redis Version
 var db = &dbClient{}
+
+//var db = &sqlDB{}
 
 func main() {
 
 	ctx := context.Background()
 
+	// Database initialisation for Redis Version.
 	err := db.InitDatabase(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Database initialisation for SQL Version.
+	//err := db.initSQLDB(ctx)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
 	r, err := etcd.NewEtcdRegistry([]string{"etcd:2379"}) // r should not be reused.
 	if err != nil {

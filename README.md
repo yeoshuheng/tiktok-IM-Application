@@ -9,7 +9,7 @@ My objective for this program was to learn as much as possible.
 Hence, this application has been implemented for both MySQL and Redis.
 Which database to be used can be configured within *./rpc-server/main.go*, *./rpc-server/handlers.go* and *./docker-compose.yml*.
 
-### Running the program.
+### Running the program
 The program can be set up by first running the following command on terminal within the project's main directory.
 This should also be ran everytime you switch between the SQL and Redis implementation of the program.
 ```shell
@@ -21,11 +21,15 @@ Subsequently, the program can be ran with just this:
     docker-compose up
 ```
 
+### Common Issues
+
 A common issue I faced when setting this program up on MacOS was a permission error in the *.buildx* file.
 This was resolved by running the following command which updates *./docker* permission settings from the terminal.
 ```shell
     sudo chown -R [user] ~./docker
 ```
+
+Another issue I faced was running opening making port 3306 available for MySQL on MacOS. Before building the script you would have to clear port 3306 by going into *System Preferences/MySQL* and stopping the server currently running on port 3306. More information can be found [here](https://stackoverflow.com/questions/54575020/not-able-to-kill-mysql-process-with-kill-9-pid).
 
 ### Structure
 The program consists of a HTTP Server that takes in HTTP requests, which are then passed onto our RPC Server, which will run the necessary logic to read / write to the database.
