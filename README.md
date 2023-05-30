@@ -29,7 +29,7 @@ This was resolved by running the following command which updates *./docker* perm
     sudo chown -R [user] ~./docker
 ```
 
-Another issue I faced was running opening making port 3306 available for MySQL on MacOS. Before building the script you would have to clear port 3306 by going into *System Preferences/MySQL* and stopping the server currently running on port 3306. More information can be found [here](https://stackoverflow.com/questions/54575020/not-able-to-kill-mysql-process-with-kill-9-pid).
+Another issue I faced was making port 3306 available for MySQL on MacOS during the build. Before building the script you would have to clear port 3306 by going into *System Preferences/MySQL* and stopping the server currently running on port 3306. More information can be found [here](https://stackoverflow.com/questions/54575020/not-able-to-kill-mysql-process-with-kill-9-pid).
 
 ### Structure
 The program consists of a HTTP Server that takes in HTTP requests, which are then passed onto our RPC Server, which will run the necessary logic to read / write to the database.
